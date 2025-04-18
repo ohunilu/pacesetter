@@ -3,10 +3,10 @@ steps:
     args: ['install']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'REGION-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app', '.']
+    args: ['build', '-t', 'europe-west4-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'REGION-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app']
+    args: ['push', 'europe-west4-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -14,11 +14,11 @@ steps:
       - run
       - deploy
       - secure-backend
-      - --image=REGION-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app
-      - --region=REGION
+      - --image=europe-west4-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app
+      - --region=europe-west4
       - --platform=managed
       - --allow-unauthenticated
       - --port=8080
 
 images:
-  - REGION-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app
+  - europe-west4-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app
