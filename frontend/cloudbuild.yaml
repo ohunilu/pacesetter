@@ -1,3 +1,6 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 steps:
   - name: 'gcr.io/cloud-builders/npm'
     dir: 'frontend'
@@ -11,10 +14,10 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'frontend'
-    args: ['build', '-t', 'REGION-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app', '.']
+    args: ['build', '-t', 'europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'REGION-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app']
+    args: ['push', 'europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -22,7 +25,7 @@ steps:
       - run
       - deploy
       - secure-frontend
-      - --image=REGION-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app
+      - --image=europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app
       - --region=REGION
       - --platform=managed
       - --allow-unauthenticated
@@ -31,7 +34,7 @@ steps:
       - _BACKEND_URL=${_BACKEND_URL} # Pass the backend URL to the deploy command
 
 substitutions:
-  _BACKEND_URL: 'DEPLOYED_BACKEND_URL' # You'll provide this during trigger creation or gcloud command
+  _BACKEND_URL: 'https://secure-backend-289242285061.europe-west1.run.app' 
 
 images:
-  - REGION-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app
+  - europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app
