@@ -12,7 +12,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8080/register", form);
+      const res = await axios.post(process.env.REACT_APP_BACKEND_URL + "/register", form);
       alert(res.data.message);
     } catch (err) {
       alert("Registration failed");
