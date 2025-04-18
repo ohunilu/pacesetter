@@ -3,9 +3,9 @@ const bcrypt = require("bcryptjs");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
-const winston = require("winston");
 const bodyParser = require("body-parser");
 const { registerSchema } = require("./utils/validatorSchema");
+const logger = require("./utils/logger");
 require("dotenv").config();
 
 const app = express();
@@ -21,11 +21,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.json(),
-  transports: [new winston.transports.Console()],
-});
 
 const users = [];
 
