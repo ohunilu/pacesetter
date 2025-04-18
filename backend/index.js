@@ -5,6 +5,7 @@ const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const winston = require("winston");
 const bodyParser = require("body-parser");
+const { registerSchema } = require("./utils/validatorSchema");
 require("dotenv").config();
 
 const app = express();
@@ -16,33 +17,28 @@ app.use(bodyParser.json());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
+  max: 100,
 });
 app.use(limiter);
 
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
-  transports: [
-    new winston.transports.Console(),
-  ]
+  transports: [new winston.transports.Console()],
 });
 
 const users = [];
 
 app.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    logger.warn("Missing fields in registration");
-    return res.status(400).json({ message: "All fields required." });
+  const { value, error } = registerSchema.validate(req.body);
+  if (error) {
+    logger.warn("Validation error", { error: error.details[0].message });
+    return res.status(400).json({ message: error.details[0].message });
   }
+  const { name, email, password } = value;
 
-  if (!email.includes("@")) {
-    logger.warn("Invalid email format");
-    return res.status(400).json({ message: "Invalid email." });
-  }
 
-  const existing = users.find(u => u.email === email);
+  const existing = users.find((u) => u.email === email);
   if (existing) {
     logger.warn("Duplicate email attempt", { email });
     return res.status(409).json({ message: "User already exists." });
