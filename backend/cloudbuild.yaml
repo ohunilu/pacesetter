@@ -20,7 +20,7 @@ steps:
       - deploy
       - secure-backend
       - --image=europe-west1-docker.pkg.dev/euphrates-pacesetters/backend/pacesetter-app
-      - --region=europe-west4
+      - --region=europe-west1 
       - --platform=managed
       - --allow-unauthenticated
       - --port=8080
