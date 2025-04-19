@@ -50,5 +50,5 @@ app.get("/health", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
+  logger.info(`Server running on port ${PORT} initiated at ${new Date().toISOString()}`);
 });
