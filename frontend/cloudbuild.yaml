@@ -2,19 +2,11 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-  - name: 'gcr.io/cloud-builders/npm'
-    dir: 'frontend'
-    args: ['install']
-
-  - name: 'gcr.io/cloud-builders/npm'
-    dir: 'frontend'
-    args: ['run', 'build']
-    env:
-      - 'REACT_APP_BACKEND_URL=${_BACKEND_URL}' # Substitute backend URL during build
-
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'frontend'
     args: ['build', '-t', 'europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app', '.']
+    env:
+      - 'REACT_APP_BACKEND_URL=${_BACKEND_URL}' # Pass environment variable during Docker build
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app']
@@ -26,7 +18,7 @@ steps:
       - deploy
       - secure-frontend
       - --image=europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app
-      - --region=REGION
+      - --region=europe-west1
       - --platform=managed
       - --allow-unauthenticated
       - --port=80
@@ -34,7 +26,7 @@ steps:
       - _BACKEND_URL=${_BACKEND_URL} # Pass the backend URL to the deploy command
 
 substitutions:
-  _BACKEND_URL: 'https://secure-backend-289242285061.europe-west1.run.app' 
+  _BACKEND_URL: 'https://secure-backend-289242285061.europe-west1.run.app'
 
 images:
   - europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app
