@@ -2,6 +2,10 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
+  - name: 'gcr.io/cloud-builders/npm'
+    dir: 'frontend'  # Specify the working directory as 'frontend'
+    args: ['install']
+    
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'frontend'
     args: ['build', '-t', 'europe-west1-docker.pkg.dev/euphrates-pacesetters/frontend/pacesetter-app', '.']
